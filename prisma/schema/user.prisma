@@ -1,0 +1,33 @@
+model User {
+    id String @id @default(uuid())
+
+    email String @unique
+    name String
+    surname String
+    phone String @unique
+    birthday DateTime?
+    password String
+    bonuses  Int @default(0)
+    photo String? @default("/photos/default.webp")
+
+    role RoleUser @default(USER)
+
+    services Service[]
+    dates Date[]
+    times Time[]
+    books Book[]
+    reviews Review[]
+
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @updatedAt @map("updated_at")
+
+    @@map("users")
+}
+
+enum RoleUser {
+    USER
+    MASTER
+    ADMIN
+
+    @@map("role_user")
+}

@@ -1,0 +1,19 @@
+model Book {
+    id String @id @default(uuid())
+
+    userId String @map("user_id")
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    timeId String? @map("time_id") @unique
+    time Time? @relation(fields: [timeId], references: [id], onDelete: Cascade)
+
+    bonuses Int @default(0)
+    isActiveBonuses Boolean @default(false)
+
+
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @updatedAt @map("updated_at")
+
+
+    @@map("books")
+}

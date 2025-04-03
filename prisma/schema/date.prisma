@@ -1,0 +1,20 @@
+model Date {
+    id String @id @default(uuid())
+
+    serviceId String @map("service_id")
+    service Service @relation(fields: [serviceId], references: [id], onDelete:  Cascade)
+
+    userId String @map("user_id")
+    user User @relation(fields: [userId], references: [id], onDelete:  Cascade)
+
+    times Time[]
+
+    date DateTime
+
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @updatedAt @map("updated_at")
+
+    @@unique([date, serviceId])
+
+    @@map("dates")
+}

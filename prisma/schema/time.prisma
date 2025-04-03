@@ -1,0 +1,23 @@
+model Time {
+    id String @id @default(uuid())
+
+    userId String @map("user_id")
+    user User @relation(fields: [userId], references: [id], onDelete:  Cascade)
+
+    dateId String @map("date_id")
+    date Date @relation(fields: [dateId], references: [id], onDelete:  Cascade)
+
+    book Book? 
+
+    time String
+
+    isBusy Boolean @default(false)
+
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @updatedAt @map("updated_at")
+
+    @@unique([time, dateId])
+    @@index([dateId])
+
+    @@map("times")
+}
