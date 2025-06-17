@@ -89,7 +89,7 @@ export class TimeService {
 			}
 		})
 
-		if (existTime) throw new ConflictException('Время на эта дату уже есть')
+		if (existTime) throw new ConflictException('Время на эту дату уже есть')
 
 		const time = await this.prismaService.time.create({
 			data: {
@@ -118,6 +118,10 @@ export class TimeService {
 		})
 
 		if (!existTime) throw new NotFoundException('Время не найдена')
+
+		if (existTime.time === dto.time) {
+			return { time: existTime }
+		}
 
 		const sameTime = await this.prismaService.time.findUnique({
 			where: {

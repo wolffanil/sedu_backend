@@ -7,7 +7,7 @@ export class CreateTimeDto {
 
 	@IsString({ message: 'Время должно быть' })
 	@Matches(/^([01]\d|2[0-3]):([0-5]\d)$/, {
-		message: 'Время должно быть в формате HH:MM'
+		message: 'Время должно быть в формате ЧЧ:MM'
 	})
 	time: string
 }

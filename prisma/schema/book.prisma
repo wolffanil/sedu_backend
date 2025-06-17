@@ -7,7 +7,6 @@ model Book {
     timeId String? @map("time_id") @unique
     time Time? @relation(fields: [timeId], references: [id], onDelete: Cascade)
 
-    bonuses Int @default(0)
     isActiveBonuses Boolean @default(false)
 
 

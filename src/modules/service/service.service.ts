@@ -57,8 +57,26 @@ export class ServiceService {
 
 		if (!existService) throw new NotFoundException('Услуга не найдена')
 
-		if (existService?.userId !== user.id)
+		if (existService.procedureId !== dto.procedureId) {
+			const existServiceUser =
+				await this.prismaService.service.findUnique({
+					where: {
+						userId_procedureId: {
+							userId: user.id,
+							procedureId: dto.procedureId
+						}
+					}
+				})
+
+			if (existServiceUser)
+				throw new ConflictException(
+					'Услуга с такой процедурой уже есть'
+				)
+		}
+
+		if (existService?.userId !== user.id) {
 			throw new ForbiddenException('Эта услуга вам не принадлежит')
+		}
 
 		const service = await this.prismaService.service.update({
 			where: {
