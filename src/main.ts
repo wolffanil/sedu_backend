@@ -47,6 +47,7 @@ async function bootstrap() {
 	)
 
 	app.use(helmet())
+
 	app.enableCors({
 		origin: config.getOrThrow<string>('ALLOWED_ORIGIN'),
 		credentials: true
