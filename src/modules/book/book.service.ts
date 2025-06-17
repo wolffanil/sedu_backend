@@ -142,7 +142,6 @@ export class BookService {
 						id: dto.timeId
 					}
 				},
-				bonuses: dto?.bonuses ?? 0,
 				isActiveBonuses: dto?.isActiveBonuses ?? false,
 				user: {
 					connect: {
