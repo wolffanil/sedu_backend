@@ -28,7 +28,8 @@ export class TimeService {
 								address: true,
 								procedure: {
 									select: {
-										title: true
+										title: true,
+										price: true
 									}
 								}
 							}
@@ -63,7 +64,8 @@ export class TimeService {
 								address: true,
 								procedure: {
 									select: {
-										title: true
+										title: true,
+										price: true
 									}
 								}
 							}

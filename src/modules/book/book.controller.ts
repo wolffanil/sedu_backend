@@ -38,7 +38,10 @@ export class BookController {
 
 	@Delete(':bookId')
 	@Auth()
-	async cancel(@Param('bookId', UuidValidationPipe) bookId: string) {
-		return this.bookService.cancel(bookId)
+	async cancel(
+		@Param('bookId', UuidValidationPipe) bookId: string,
+		@Authorized() user: User
+	) {
+		return this.bookService.cancel(bookId, user)
 	}
 }

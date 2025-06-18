@@ -102,6 +102,7 @@ export class BookService {
 										address: true,
 										procedure: {
 											select: {
+												price: true,
 												service: true,
 												id: true,
 												title: true
@@ -148,8 +149,42 @@ export class BookService {
 						id: user.id
 					}
 				}
+			},
+			select: {
+				time: {
+					select: {
+						date: {
+							select: {
+								service: {
+									select: {
+										procedure: {
+											select: {
+												price: true
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
 			}
 		})
+
+		if (dto.isActiveBonuses) {
+			const precent = Number(book.time.date.service.procedure.price) * 0.1
+
+			await this.prismaService.user.update({
+				where: {
+					id: user.id
+				},
+				data: {
+					bonuses: {
+						decrement: precent
+					}
+				}
+			})
+		}
 
 		await this.prismaService.time.update({
 			where: {
@@ -163,7 +198,7 @@ export class BookService {
 		return { book }
 	}
 
-	public async cancel(bookId: string) {
+	public async cancel(bookId: string, user: User) {
 		const existBook = await this.prismaService.book.findUnique({
 			where: {
 				id: bookId
@@ -173,11 +208,46 @@ export class BookService {
 		if (!existBook)
 			throw new NotFoundException('Бранирование на это время не найдено')
 
-		await this.prismaService.book.delete({
+		const book = await this.prismaService.book.delete({
 			where: {
 				id: bookId
+			},
+			select: {
+				isActiveBonuses: true,
+				time: {
+					select: {
+						date: {
+							select: {
+								service: {
+									select: {
+										procedure: {
+											select: {
+												price: true
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
 			}
 		})
+
+		if (book?.isActiveBonuses) {
+			const precent = Number(book.time.date.service.procedure.price) * 0.1
+
+			await this.prismaService.user.update({
+				where: {
+					id: user.id
+				},
+				data: {
+					bonuses: {
+						increment: precent
+					}
+				}
+			})
+		}
 
 		await this.prismaService.time.update({
 			where: {
