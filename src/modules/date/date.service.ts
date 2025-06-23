@@ -1,4 +1,8 @@
-import { ConflictException, Injectable } from '@nestjs/common'
+import {
+	BadRequestException,
+	ConflictException,
+	Injectable
+} from '@nestjs/common'
 
 import type { User } from '@/prisma/generated'
 import { PrismaService } from '@/src/core/prisma/prisma.service'
@@ -63,6 +67,18 @@ export class DateService {
 	}
 
 	public async delete(dateId: string) {
+		const existBook = await this.prismaService.book.count({
+			where: {
+				time: {
+					dateId: dateId
+				}
+			}
+		})
+
+		if (!!existBook) {
+			throw new BadRequestException('У даты есть бронирование')
+		}
+
 		await this.prismaService.date.delete({
 			where: {
 				id: dateId
@@ -83,12 +99,19 @@ export class DateService {
 	// }
 
 	public async getByProcedureId(procedureId: string) {
+		const currentDate = new Date()
+
 		const dates = await this.prismaService.service.findMany({
 			where: {
 				procedureId
 			},
 			include: {
 				dates: {
+					where: {
+						date: {
+							gt: currentDate
+						}
+					},
 					select: {
 						id: true,
 						date: true

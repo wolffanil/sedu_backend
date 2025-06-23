@@ -80,7 +80,7 @@ export class BookService {
 			}
 		}
 
-		const books = await this.prismaService.book.findMany({
+		let books = await this.prismaService.book.findMany({
 			where: {
 				userId: user.id,
 				...whereCondition.time
@@ -116,6 +116,29 @@ export class BookService {
 				}
 			}
 		})
+
+		// if (lastVisits) {
+		// 	const oneHourAgo = new Date(currentDate.getTime() - 60 * 60 * 1000)
+
+		// 	const hours = String(oneHourAgo.getHours()).padStart(2, '0')
+		// 	books = books.filter(book => {
+		// 		const [h, minutes] = book.time.time.split(':')
+		// 		return Number(h) <= Number(hours)
+		// 	})
+		// } else {
+		// 	const currentHour = new Date(currentDate.getTime())
+
+		// 	const hours = String(currentHour.getHours()).padStart(2, '0')
+		// 	books = books.filter(book => {
+		// 		if (
+		// 			book.createdAt.toString().split('T')[0] ==
+		// 			currentDate.toString().split('T')[0]
+		// 		)
+		// 			return true
+		// 		const [h, minutes] = book.time.time.split(':')
+		// 		return Number(h) >= Number(hours)
+		// 	})
+		// }
 
 		return { books }
 	}
