@@ -133,9 +133,16 @@ export class DateService {
 			where: {
 				userId: user.id
 			},
+			relationLoadStrategy: 'join',
 			select: {
 				date: true,
-				id: true
+				id: true,
+				service: {
+					select: {
+						procedureId: true,
+						serviceType: true
+					}
+				}
 			},
 			orderBy: {
 				date: 'asc'
